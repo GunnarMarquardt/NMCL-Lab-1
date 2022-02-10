@@ -1,0 +1,38 @@
+p = [[0;0] [0;1] [1;0] [1;1]];
+t = [0 1 1 0];
+
+net = newff(p,t,[2], {'tansig', 'logsig'},'trainrp','','mse',{},{},'')
+
+% Assume that for the start we will not change the deltamax and delta0 so
+% much
+
+delta0s= [0.01 0.1 1];
+deltamaxs= [1 1.5 2];
+
+
+for i=1:length(delta0s)
+
+    figure;
+    ax = axes; 
+    hold on;
+    grid on;
+    
+    title_lr = ['delta0 = ' num2str(delta0s(i))];
+    title(title_lr);
+    
+
+    for j=1:10
+        net = init(net); 
+        net.trainParam.delta0 = delta0s(i);
+        net.trainParam.deltamax = deltamaxs(i);
+
+        net.trainParam.epochs = 1000;
+        
+        [trained_net, status] = train(net, p ,t);
+        
+        plot(ax, status.perf)
+        plot_xor(trained_net)
+    end
+    %pause
+    
+end

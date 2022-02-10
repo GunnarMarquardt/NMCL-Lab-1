@@ -6,7 +6,7 @@ net = newff(p,t,[2], {'tansig', 'logsig'},'traingd','','mse',{},{},'')
 %net = init(net); [trained_net, status] = train(net, p ,t);
 
 learning_rates = [0.1 2 20];
-number_epochs = [13000 3000 3000]
+number_epochs = [2500 250 100];
 
 
 for i=1:length(learning_rates)
@@ -21,9 +21,10 @@ for i=1:length(learning_rates)
     
 
     for j=1:10
+        net = init(net); 
         net.trainParam.lr = learning_rates(i);
         net.trainParam.epochs = number_epochs(i);
-        net = init(net); [trained_net, status] = train(net, p ,t);
+        [trained_net, status] = train(net, p ,t);
         
         plot(ax, status.perf)
         %plot_xor(trained_net)
